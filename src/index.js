@@ -10,7 +10,7 @@ app.use(express.static(__dirname + "/../public/"));
 
 //mqtt
 const mqtt = require("mqtt");
-const client = mqtt.connect("mqtt://172.17.0.2:1883");
+const client = mqtt.connect("mqtt://mqtt-broker:1883");
 
 io.on("connection", (socket) => {
   console.log("Connection Established");
