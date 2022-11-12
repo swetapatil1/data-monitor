@@ -29,6 +29,15 @@ const OPTIONS = {
 let connectUrl = `mqtt://${host}:${port}`
 
 const topic = 'Patient1/Spo2'
+const topic1 = 'Patient1/body temperature'
+const topic2 = 'Patient1/heart rate'
+const topic3 = 'Patient1/Systolic Blood pressure'
+const topic4= 'Patient1/Diastolic Blood Pressure'
+const topic5 = 'Patient2/Spo2'
+const topic6 = 'Patient2/body temperature'
+const topic7 = 'Patient2/heart rate'
+const topic8 = 'Patient2/Systolic Blood pressure'
+const topic9= 'Patient2/Diastolic Blood Pressure'
 
 const client = mqtt.connect(connectUrl, OPTIONS)
 
@@ -48,6 +57,33 @@ client.on("connect", () => {
   client.subscribe([topic], () => {
     console.log(`Subscribe to topic '${topic}'`)
   })
+  client.subscribe([topic1], () => {
+    console.log(`Subscribe to topic '${topic1}'`)
+  })
+  client.subscribe([topic2], () => {
+    console.log(`Subscribe to topic '${topic2}'`)
+  })
+  client.subscribe([topic3], () => {
+    console.log(`Subscribe to topic '${topic3}'`)
+  })
+  client.subscribe([topic4], () => {
+    console.log(`Subscribe to topic '${topic4}'`)
+  })
+  client.subscribe([topic5], () => {
+    console.log(`Subscribe to topic '${topic5}'`)
+  })
+  client.subscribe([topic6], () => {
+    console.log(`Subscribe to topic '${topic6}'`)
+  })
+  client.subscribe([topic7], () => {
+    console.log(`Subscribe to topic '${topic7}'`)
+  })
+  client.subscribe([topic8], () => {
+    console.log(`Subscribe to topic '${topic8}'`)
+  })
+  client.subscribe([topic9], () => {
+    console.log(`Subscribe to topic '${topic9}'`)
+  })
 });
 
 client.on('reconnect', (error) => {
@@ -63,10 +99,7 @@ client.on("message", (topic, message) => {
   console.log("This is topic " + topic);
   // const data = JSON.parse(message);
   // console.log(data);
-  io.emit("mqtt", {
-    type: topic,
-    message: message
-});
+  socket.emit('mqtt', { message: topic, id: socket.id });
 });
 
 server.listen(PORT, function () {
