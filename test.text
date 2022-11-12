@@ -1,4 +1,0 @@
-docker run -it --name=example1 --mount source=data,destination=/data ubuntu
-
-
-docker run eclipse-mosquitto --mount source=/Users/swetapatil/BITS/Git/Edge,destination=Computing/data-monitor/config/mosquitto.conf:/mosquitto/config/mosquitto.conf 
