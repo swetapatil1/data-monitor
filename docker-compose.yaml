@@ -4,14 +4,18 @@ services:
     image: eclipse-mosquitto
     restart: always
     ports:
-      - 1883:1883
+      - 8883:1883
       - 9001:9001
+    extra_hosts:
+      - "0.0.0.0:127.0.0.1"  
+    volumes: 
+      - /Users/swetapatil/BITS/Git/Edge Computing/data-monitor/config/mosquitto.conf:/mosquitto/config/mosquitto.conf 
     networks:
       - edge-computing
 
   mqtt-pub:
     container_name: mqtt-pub
-    image: health_sensor_pub_img
+    image: mqtt-publisher  
     restart: always
     networks:
       - edge-computing
@@ -25,7 +29,9 @@ services:
     networks:
       - edge-computing
     ports:
-      - 8080:8083
+      - 8083:8080
+    extra_hosts:
+      - "0.0.0.0:127.0.0.1"
     depends_on:
       - mqtt-broker
 

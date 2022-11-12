@@ -1,12 +1,13 @@
 #_sensors_emulator.py
-
-from config import *
+import sys
+sys.path.append('../../')
+import config
 import paho.mqtt.client as mqtt
 import time
 import csv
 
-host_ip = '172.17.0.2'
-port = 1883
+host_ip = '0.0.0.0'
+port = 8883
 keepalive = 60
 print_message = "{}: {}"
 

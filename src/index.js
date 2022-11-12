@@ -5,31 +5,64 @@ const io = require("socket.io")(server);
 const PORT = 8080;
 const cors = require("cors");
 
+const mqtt = require('mqtt')
+const fs = require('fs')
+
+const { Command } = require('commander')
+
 app.use(cors());
 app.use(express.static(__dirname + "/../public/"));
 
-//mqtt
-const mqtt = require("mqtt");
-const client = mqtt.connect("mqtt://mqtt-broker:1883");
+const host = '172.17.0.2'
+const port = '1883'
+const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 
-io.on("connection", (socket) => {
-  console.log("Connection Established");
-  socket.emit("message", "Hello World");
-});
+// connect options
+const OPTIONS = {
+  clientId,
+  clean: true,
+  connectTimeout: 4000,
+  reconnectPeriod: 1000,
+}
+
+// default is mqtt, unencrypted tcp connection
+let connectUrl = `mqtt://${host}:${port}`
+
+const topic = 'Patient1/Spo2'
+
+const client = mqtt.connect(connectUrl, OPTIONS)
+
+io.on('connection', () => {
+  console.log(`Connected`)
+  // client.subscribe([topic], () => {
+  //   console.log(`Subscribe to topic '${topic}'`)
+  // })
+  // client.publish(topic, 'nodejs mqtt test', { qos: 0, retain: false }, (error) => {
+  //   if (error) {
+  //     console.error(error)
+  //   }
+  // })
+})
 
 client.on("connect", () => {
-  client.subscribe("pots", function (err) {
-    if (!err) {
-      client.publish("node1", "Server device 1: device name");
-      console.log("device name");
-    }
-  });
+  client.subscribe([topic], () => {
+    console.log(`Subscribe to topic '${topic}'`)
+  })
 });
 
+client.on('reconnect', (error) => {
+  console.log(`Reconnecting`, error)
+})
+
+client.on('error', (error) => {
+  console.log(`Cannot connect:`, error)
+})
+
 client.on("message", (topic, message) => {
-  const data = JSON.parse(message);
-  console.log(data);
-  io.emit("mqtt", data.pot1);
+  console.log("This is the message received " + message);
+  // const data = JSON.parse(message);
+  // console.log(data);
+  io.emit("mqtt", message);
 });
 
 server.listen(PORT, function () {
