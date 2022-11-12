@@ -1,36 +1,31 @@
 services:
   mqtt-broker:
     container_name: mqtt-broker
-    image: eclipse-mosquitto:mqtt_broker
+    image: eclipse-mosquitto
     restart: always
     ports:
       - 1883:1883
       - 9001:9001
     networks:
       - edge-computing
-    environment:
 
   mqtt-pub:
     container_name: mqtt-pub
-    image: python:3.7-alpine:mqtt_pub
+    image: health_sensor_pub_img
     restart: always
     networks:
       - edge-computing
-    ports:
-      - 8081:8081
-    environment:
     depends_on:
       - mqtt-broker
 
   data-monitor:
-    build: .
     container_name: data-monitor
+    image: patilsweta2008/data-monitor
     restart: always
     networks:
       - edge-computing
     ports:
-      - 8081:8081
-    environment:
+      - 8080:8083
     depends_on:
       - mqtt-broker
 
