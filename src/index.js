@@ -60,9 +60,13 @@ client.on('error', (error) => {
 
 client.on("message", (topic, message) => {
   console.log("This is the message received " + message);
+  console.log("This is topic " + topic);
   // const data = JSON.parse(message);
   // console.log(data);
-  io.emit("mqtt", message);
+  io.emit("mqtt", {
+    type: topic,
+    message: message
+});
 });
 
 server.listen(PORT, function () {
