@@ -99,7 +99,7 @@ client.on("message", (topic, message) => {
   console.log("This is topic " + topic);
   // const data = JSON.parse(message);
   // console.log(data);
-  socket.emit('mqtt', { message: topic, id: socket.id });
+  io.emit('mqtt', { message: message, id: io.id });
 });
 
 server.listen(PORT, function () {
